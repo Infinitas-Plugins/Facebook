@@ -1,4 +1,4 @@
-	<?php
+<?php
 	/**
 	 * Facebook.Api Library used to create an instanciated facebook API available to the user
 	 *
