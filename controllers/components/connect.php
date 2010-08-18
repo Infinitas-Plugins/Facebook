@@ -121,6 +121,7 @@
 					$user[$this->User->alias]['username'] = str_replace('http://www.facebook.com/', '', $fbUser['link']);
 					$user[$this->User->alias]['first_name'] = $fbUser['first_name'];
 					$user[$this->User->alias]['last_name'] = $fbUser['last_name'];
+					$user[$this->User->alias]['active'] = 1;
 
 					$this->hasAccount = $this->User->save($user, array('validate' => false));
 				}
