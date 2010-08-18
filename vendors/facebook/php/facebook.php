@@ -1,8 +1,4 @@
 <?php
-
-if (!function_exists('curl_init')) {
-  throw new Exception('Facebook needs the CURL PHP extension.');
-}
 if (!function_exists('json_decode')) {
   throw new Exception('Facebook needs the JSON PHP extension.');
 }
@@ -498,38 +494,27 @@ class Facebook
    * @return String the response text
    */
   protected function makeRequest($url, $params, $ch=null) {
-    if (!$ch) {
-      $ch = curl_init();
-    }
+	App::import('HttpSocket');
+	$HttpSocket = new HttpSocket();
 
-    $opts = self::$CURL_OPTS;
-    $opts[CURLOPT_POSTFIELDS] = http_build_query($params, null, '&');
-    $opts[CURLOPT_URL] = $url;
+  	$abc = explode('|', $this->session['access_token'], 2);
 
-    // disable the 'Expect: 100-continue' behaviour. This causes CURL to wait
-    // for 2 seconds if the server does not support this header.
-    if (isset($opts[CURLOPT_HTTPHEADER])) {
-      $existing_headers = $opts[CURLOPT_HTTPHEADER];
-      $existing_headers[] = 'Expect:';
-      $opts[CURLOPT_HTTPHEADER] = $existing_headers;
-    } else {
-      $opts[CURLOPT_HTTPHEADER] = array('Expect:');
-    }
+  	$request = array(
+		'method' => 'GET',
+		'uri' => array(
+			'scheme' => 'https',
+			'host' => 'graph.facebook.com',
+			'path' => '/me',
+			'query' => $params,
+			'fragment' => null
+		),
+		'header' => array(
+			'Connection' => 'close',
+			'User-Agent' => 'facebook-php-2.0'
+		)
+	);
+  	$result = $HttpSocket->request($request);
 
-    curl_setopt_array($ch, $opts);
-    $result = curl_exec($ch);
-    if ($result === false) {
-      $e = new FacebookApiException(array(
-        'error_code' => curl_errno($ch),
-        'error'      => array(
-          'message' => curl_error($ch),
-          'type'    => 'CurlException',
-        ),
-      ));
-      curl_close($ch);
-      throw $e;
-    }
-    curl_close($ch);
     return $result;
   }
 
@@ -775,7 +760,7 @@ class Facebook
   }
 
   /**
-   * Prints to the error log if you aren't in command line mode. 
+   * Prints to the error log if you aren't in command line mode.
    *
    * @param String log message
    */
