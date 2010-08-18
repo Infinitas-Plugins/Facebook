@@ -137,10 +137,10 @@ to handle the fbxml tags.
 
 Edit your Layout to take advantage of advanced facebook features
 ==================
-Replace <html> with <?php $this->Facebook->html(); ?>
+Replace <html> with <?php echo $this->Facebook->html(); ?>
 
 In your default.ctp it's highly suggest you replace your <html> tag with
-<?php $this->Facebook->html(); ?> This is required for some of the facebook features to
+<?php echo $this->Facebook->html(); ?> This is required for some of the facebook features to
  work in IE.
 
 At the bottom of the page include <?php $this->Facebook->init(); ?> To load the facebook
@@ -165,22 +165,22 @@ public $components = array('Auth', 'Facebook.Connect');
 That's it.  You're now ready to accept facebook authentication.
 
 Login/Logout buttons:
-Simple login: <?php $this->Facebook->login() ?>
-Extended login: <?php $this->Facebook->login(array('perms' => 'email,publish_stream')) ?>
-Logout button: <?php $this->Facebook->logout() ?>
+Simple login: <?php echo $this->Facebook->login(); ?>
+Extended login: <?php echo $this->Facebook->login(array('perms' => 'email,publish_stream')); ?>
+Logout button: <?php echo $this->Facebook->logout(); ?>
 
-In your view, just add <?php $this->Facebook->login() ?> to create a login button.
-To log a user out simply use <?php $this->Facebook->logout() ?>. to create a
+In your view, just add <?php echo $this->Facebook->login(); ?> to create a login button.
+To log a user out simply use <?php echo $this->Facebook->logout(); ?>. to create a
 logout button.  Each button has multiple options, review the API to see all
 available options
 
 If you already have an authentication system setup, the logout step will need
 to also log out the user from your authentication system.   Simply pass in a
-redirect to $this->Facebook->logout() to your system's logout authentication action.
+redirect to $this->Facebook->logout(); to your system's logout authentication action.
 
 Example:
-<?php $this->Facebook->logout(array('redirect' => 'users/logout')); ?>
-<?php $this->Facebook->logout(array('redirect' => array('controller' => 'users', 'action' => 'logout'))); ?>
+<?php echo $this->Facebook->logout(array('redirect' => 'users/logout')); ?>
+<?php echo $this->Facebook->logout(array('redirect' => array('controller' => 'users', 'action' => 'logout'))); ?>
 
 This will log out of the facebook authentication and then redirect to your
 authentication logout for you to finish the logout.
