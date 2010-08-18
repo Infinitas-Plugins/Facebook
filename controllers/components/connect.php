@@ -113,9 +113,16 @@
 				}
 				// create the user if we don't have one
 				elseif (empty($user) && $this->createUser) {
+					$this->Controller->Session->write('FB.new_account', true);
 					$user[$this->User->alias]['facebook_id'] = $this->uid;
-					$user[$this->User->alias][$Auth->fields['password']] = $Auth->password('disabled');
-					$this->hasAccount = ($this->User->save($user, array('validate' => false)));
+					$user[$this->User->alias][$Auth->fields['password']] = $Auth->password(time());
+
+					$fbUser = $this->Controller->Session->read('FB.Me');
+					$user[$this->User->alias]['username'] = str_replace('http://www.facebook.com/', '', $fbUser['link']);
+					$user[$this->User->alias]['first_name'] = $fbUser['first_name'];
+					$user[$this->User->alias]['last_name'] = $fbUser['last_name'];
+
+					$this->hasAccount = $this->User->save($user, array('validate' => false));
 				}
 				// Login user if we have one
 				if ($user) {
