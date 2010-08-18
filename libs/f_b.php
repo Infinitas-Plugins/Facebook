@@ -20,7 +20,7 @@
 				FacebookInfo::getConfig();
 				self::$Facebook = new Facebook(
 					FacebookInfo::$configs
-					);
+				);
 			}
 		}
 
