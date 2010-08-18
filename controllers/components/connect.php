@@ -167,7 +167,9 @@
 		 * @access private
 		 */
 		function __initUserModel() {
-			$this->User = ClassRegistry::init($this->Controller->Auth->userModel);
+			App::import(Configure::read('Facebook.userModel'));
+			$this->User = new User();
+
 			if (isset($this->User)) {
 				$this->User->recursive = - 1;
 				return true;
