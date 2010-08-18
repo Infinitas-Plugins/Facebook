@@ -82,16 +82,18 @@
 			if (!isset($this->Controller->Auth)) {
 				return false;
 			}
-			// set Auth to a convenience variable
-			$Auth = $this->Controller->Auth;
+
 			if (!$this->__initUserModel()) {
 				return false;
 			}
+
 			// if you don't have a facebook_id field in your user table, throw an error
 			if (!$this->User->hasField('facebook_id')) {
 				$this->__error("Facebook.Connect handleFacebookUser Error.  facebook_id not found in {$Auth->userModel} table.");
 				return false;
 			}
+			// set Auth to a convenience variable
+			$Auth = $this->Controller->Auth;
 			// check if the user already has an account
 			// User is logged in but doesn't have a
 			if ($Auth->user()) {
@@ -100,6 +102,7 @@
 				if (!$this->User->field('facebook_id')) {
 					$this->User->saveField('facebook_id', $this->uid);
 				}
+				unset($this->User, $Auth);
 				return true;
 			} else {
 				// attempt to find the user by their facebook id
