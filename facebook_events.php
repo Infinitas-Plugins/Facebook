@@ -21,47 +21,73 @@
 	 */
 
 	 class FacebookEvents{
+		 public function onSetupCache(){
+		 }
+
+		 private function __getConfig(){
+			$config = Configure::read('Facebook');
+
+			if(empty($config)){
+				Configure::load('facebook.facebook');
+				$config = Configure::read('Facebook');
+			}
+			
+			return $config;
+		 }
+		 
 		 public function onCmsBeforeContentRender(&$event, $data){
-			$link = $data['_this']->Event->trigger('cms.slugUrl', array('type' => 'contents', 'data' => $data['content']));
-			return $data['_this']->Facebook->like(
-				array(
-					'href' => Router::url(current($link['slugUrl']), true),
-					'layout' => 'button_count',
-					'title' => 'recommend'
-				)
-			);
+			$config = $this->__getConfig();
+			if(isset($config['Cms.before']) && in_array('like', $config['Cms.before'])){
+				$link = $data['_this']->Event->trigger('cms.slugUrl', array('type' => 'contents', 'data' => $data['content']));
+				return $data['_this']->Facebook->like(
+					array(
+						'href' => Router::url(current($link['slugUrl']), true),
+						'layout' => 'button_count',
+						'title' => 'recommend'
+					)
+				);
+			}
 		 }
 
 		 public function onCmsAfterContentRender(&$event, $data){
-			$link = $data['_this']->Event->trigger('cms.slugUrl', array('type' => 'contents', 'data' => $data['content']));
-			return $data['_this']->Facebook->like(
-				array(
-					'href' => Router::url(current($link['slugUrl']), true),
-					'layout' => 'button_count',
-					'title' => 'recommend'
-				)
-			);
+			$config = $this->__getConfig();
+			if(isset($config['Cms.after']) && in_array('like', $config['Cms.after'])){
+				$link = $data['_this']->Event->trigger('cms.slugUrl', array('type' => 'contents', 'data' => $data['content']));
+				return $data['_this']->Facebook->like(
+					array(
+						'href' => Router::url(current($link['slugUrl']), true),
+						'layout' => 'button_count',
+						'title' => 'recommend'
+					)
+				);
+			}
 		 }
 
 		 public function onBlogBeforeContentRender(&$event, $data){
-			$link = $data['_this']->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $data['content']));
-			return $data['_this']->Facebook->like(
-				array(
-					'href' => Router::url(current($link['slugUrl']), true),
-					'layout' => 'button_count',
-					'title' => 'recommend'
-				)
-			);
+			$config = $this->__getConfig();
+			if(isset($config['Blog.before']) && in_array('like', $config['Blog.before'])){
+				$link = $data['_this']->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $data['post']));
+				return $data['_this']->Facebook->like(
+					array(
+						'href' => Router::url(current($link['slugUrl']), true),
+						'layout' => 'button_count',
+						'title' => 'recommend'
+					)
+				);
+			}
 		 }
 
 		 public function onBlogAfterContentRender(&$event, $data){
-			$link = $data['_this']->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $data['content']));
-			return $data['_this']->Facebook->like(
-				array(
-					'href' => Router::url(current($link['slugUrl']), true),
-					'layout' => 'button_count',
-					'title' => 'recommend'
-				)
-			);
+			$config = $this->__getConfig();
+			if(isset($config['Blog.after']) && in_array('like', $config['Blog.after'])){
+				$link = $data['_this']->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $data['post']));
+				return $data['_this']->Facebook->like(
+					array(
+						'href' => Router::url(current($link['slugUrl']), true),
+						'layout' => 'button_count',
+						'title' => 'recommend'
+					)
+				);
+			}
 		 }
 	 }
