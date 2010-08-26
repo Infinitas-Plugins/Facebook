@@ -21,4 +21,25 @@
 	 */
 
 	 class FacebookEvents{
+		 public function onCmsBeforeContentRender(&$event, $data){
+			$link = $data['_this']->Event->trigger('cms.slugUrl', array('type' => 'contents', 'data' => $data['content']));
+			return $data['_this']->Facebook->like(
+				array(
+					'href' => Router::url(current($link['slugUrl']), true),
+					'layout' => 'button_count',
+					'title' => 'recommend'
+				)
+			);
+		 }
+
+		 public function onCmsAfterContentRender(&$event, $data){
+			$link = $data['_this']->Event->trigger('cms.slugUrl', array('type' => 'contents', 'data' => $data['content']));
+			return $data['_this']->Facebook->like(
+				array(
+					'href' => Router::url(current($link['slugUrl']), true),
+					'layout' => 'button_count',
+					'title' => 'recommend'
+				)
+			);
+		 }
 	 }
