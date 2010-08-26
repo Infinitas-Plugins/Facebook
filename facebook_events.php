@@ -42,4 +42,26 @@
 				)
 			);
 		 }
+
+		 public function onBlogBeforeContentRender(&$event, $data){
+			$link = $data['_this']->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $data['content']));
+			return $data['_this']->Facebook->like(
+				array(
+					'href' => Router::url(current($link['slugUrl']), true),
+					'layout' => 'button_count',
+					'title' => 'recommend'
+				)
+			);
+		 }
+
+		 public function onBlogAfterContentRender(&$event, $data){
+			$link = $data['_this']->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $data['content']));
+			return $data['_this']->Facebook->like(
+				array(
+					'href' => Router::url(current($link['slugUrl']), true),
+					'layout' => 'button_count',
+					'title' => 'recommend'
+				)
+			);
+		 }
 	 }
