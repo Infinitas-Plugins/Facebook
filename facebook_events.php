@@ -36,6 +36,10 @@
 			return $config;
 		}
 
+		public function onRequireHelpersToLoad(){
+			return 'Facebook.Facebook';
+		}
+
 		/**
 		 * Called before cms content is echo'ed
 		 */
