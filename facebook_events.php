@@ -36,6 +36,10 @@
 			return $config;
 		}
 
+		public function onRequireComponentsToLoad(&$event){
+			return 'Facebook.Connect';
+		}
+
 		public function onRequireHelpersToLoad(){
 			return 'Facebook.Facebook';
 		}
