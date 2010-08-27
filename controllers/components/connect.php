@@ -49,6 +49,9 @@
 		 * @access public
 		 */
 		function initialize($Controller, $settings = array()) {
+			if(!Configure::load('facebook.facebook')){
+				return false;
+			}
 			$this->Controller = $Controller;
 			$this->_set($settings);
 			$this->FB = new FB();
