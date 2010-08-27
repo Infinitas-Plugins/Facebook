@@ -1,5 +1,5 @@
 <?php
-	/* 
+/* 
 	 * Short Description / title.
 	 * 
 	 * Overview of what the file does. About a paragraph or two
@@ -18,76 +18,119 @@
 	 * 
 	 * Licensed under The MIT License
 	 * Redistributions of files must retain the above copyright notice.
-	 */
+	*/
+	App::import('Lib', 'Facebook.FB');
+	
+	class FacebookEvents {
+		public function onSetupCache() {
+		}
 
-	 class FacebookEvents{
-		 public function onSetupCache(){
-		 }
-
-		 private function __getConfig(){
+		private function __getConfig() {
 			$config = Configure::read('Facebook');
 
-			if(empty($config)){
+			if(empty($config)) {
 				Configure::load('facebook.facebook');
 				$config = Configure::read('Facebook');
 			}
-			
+
 			return $config;
-		 }
-		 
-		 public function onCmsBeforeContentRender(&$event, $data){
+		}
+
+		/**
+		 * Called before cms content is echo'ed
+		 */
+		public function onCmsBeforeContentRender(&$event, $data) {
 			$config = $this->__getConfig();
-			if(isset($config['Cms.before']) && in_array('like', $config['Cms.before'])){
+			if(isset($config['Cms.before']) && in_array('like', $config['Cms.before'])) {
 				$link = $data['_this']->Event->trigger('cms.slugUrl', array('type' => 'contents', 'data' => $data['content']));
 				return $data['_this']->Facebook->like(
-					array(
+						array(
 						'href' => Router::url(current($link['slugUrl']), true),
 						'layout' => 'button_count',
 						'title' => 'recommend'
-					)
+						)
 				);
 			}
-		 }
+		}
 
-		 public function onCmsAfterContentRender(&$event, $data){
+
+		/**
+		 * Called after cms content is echo'ed
+		 */
+		public function onCmsAfterContentRender(&$event, $data) {
 			$config = $this->__getConfig();
-			if(isset($config['Cms.after']) && in_array('like', $config['Cms.after'])){
+			if(isset($config['Cms.after']) && in_array('like', $config['Cms.after'])) {
 				$link = $data['_this']->Event->trigger('cms.slugUrl', array('type' => 'contents', 'data' => $data['content']));
 				return $data['_this']->Facebook->like(
-					array(
+						array(
 						'href' => Router::url(current($link['slugUrl']), true),
 						'layout' => 'button_count',
 						'title' => 'recommend'
-					)
+						)
 				);
 			}
-		 }
+		}
 
-		 public function onBlogBeforeContentRender(&$event, $data){
+		/**
+		 * Called before blog post is echo'ed
+		 */
+		public function onBlogBeforeContentRender(&$event, $data) {
 			$config = $this->__getConfig();
-			if(isset($config['Blog.before']) && in_array('like', $config['Blog.before'])){
+			if(isset($config['Blog.before']) && in_array('like', $config['Blog.before'])) {
 				$link = $data['_this']->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $data['post']));
 				return $data['_this']->Facebook->like(
-					array(
+						array(
 						'href' => Router::url(current($link['slugUrl']), true),
 						'layout' => 'button_count',
 						'title' => 'recommend'
-					)
+						)
 				);
 			}
-		 }
+		}
 
-		 public function onBlogAfterContentRender(&$event, $data){
+		/**
+		 * Called after blog post is echo'ed
+		 */
+		public function onBlogAfterContentRender(&$event, $data) {
 			$config = $this->__getConfig();
-			if(isset($config['Blog.after']) && in_array('like', $config['Blog.after'])){
+			if(isset($config['Blog.after']) && in_array('like', $config['Blog.after'])) {
 				$link = $data['_this']->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $data['post']));
 				return $data['_this']->Facebook->like(
-					array(
+						array(
 						'href' => Router::url(current($link['slugUrl']), true),
 						'layout' => 'button_count',
 						'title' => 'recommend'
-					)
+						)
 				);
 			}
-		 }
-	 }
+		}
+
+		/**
+		 * called if a page is added and active, or activated.
+		 */
+		public function onCmsContentAdded(&$event, $data) {
+			$link = $data['event']->trigger(
+				'cms.slugUrl',
+				array(
+					'type' => 'contents',
+					'data' => $data
+				)
+			);
+			$link = Router::url(current($link['slugUrl']), true);
+
+			$config = $this->__getConfig();
+
+
+			$Facebook = new Facebook($config);
+			$Facebook->api(
+				'/'.$config['appId'].'/feed',
+				'POST',
+				array(
+					'body' => $link,
+					'description' => $event->Handler->params['data']['Content']['description'],
+					'message' => $event->Handler->params['data']['Content']['description']
+				)
+			);
+			exit;
+		}
+	}
