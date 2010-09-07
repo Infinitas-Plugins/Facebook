@@ -21,7 +21,7 @@
 	*/
 	App::import('Lib', 'Facebook.FB');
 	
-	class FacebookEvents {
+	class FacebookEvents extends AppEvents{
 		public function onSetupCache() {
 		}
 
