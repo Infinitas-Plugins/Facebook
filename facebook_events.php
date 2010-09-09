@@ -25,6 +25,10 @@
 		public function onSetupCache() {
 		}
 
+		public function onSetupConfig(){
+			return Configure::load('facebook.facebook');
+		}
+
 		private function __getConfig() {
 			$config = Configure::read('Facebook');
 
