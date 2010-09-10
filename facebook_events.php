@@ -47,6 +47,21 @@
 		public function onRequireHelpersToLoad(){
 			return 'Facebook.Facebook';
 		}
+		
+		public function onRequireTodoList(&$event){
+			$config = Configure::read('Facebook');
+			if(!empty($config)){
+				return false;
+			}
+			
+			return array(
+				array(
+					'name' => 'Api key is not setup',
+					'type' => 'error',
+					'url' => '#'
+				)
+			);
+		}
 
 		/**
 		 * Called before cms content is echo'ed
