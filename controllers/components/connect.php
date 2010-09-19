@@ -56,6 +56,7 @@
 			$this->_set($settings);
 			$this->FB = new FB();
 			$this->session = $this->FB->getSession();
+			
 			if ($this->session) {
 				$this->uid = $this->FB->getUser();
 				$this->me = $this->FB->api('/me');
@@ -102,12 +103,16 @@
 			if ($Auth->user()) {
 				$this->hasAccount = true;
 				$this->User->id = $Auth->user('id');
+
 				if (!$this->User->field('facebook_id')) {
 					$this->User->saveField('facebook_id', $this->uid);
 				}
+
 				unset($this->User, $Auth);
 				return true;
-			} else {
+			}
+
+			else {
 				// attempt to find the user by their facebook id
 				$user = $this->User->findByFacebookId($this->uid);
 				// if we have a user, set hasAccount
@@ -115,7 +120,7 @@
 					$this->hasAccount = true;
 				}
 				// create the user if we don't have one
-				elseif (empty($user) && $this->createUser) {
+				else if (empty($user) && $this->createUser) {
 					$this->Controller->Session->write('FB.new_account', true);
 					$user[$this->User->alias]['facebook_id'] = $this->uid;
 					$user[$this->User->alias][$Auth->fields['password']] = $Auth->password(time());
