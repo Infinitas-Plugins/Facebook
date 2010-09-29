@@ -124,7 +124,7 @@
 				'label' => 'share',
 				'anchor' => 'fb_share',
 				'fbxml' => false
-				);
+			);
 			$options = array_merge($defaults, $options);
 
 			if(!$options['fbxml']) {

@@ -169,14 +169,15 @@
 				'element' => 'login',
 				'config' => array(
 					'plugin' => 'facebook',
-					'login' => array(
-						'show-faces' => true,
-						'perms' => 'publish_stream,offline_access,email,read_stream,user_education_history,user_hometown,user_location,user_relationships'
-					),
-					'logout' => array(
-						'redirect' => array('plugin' => 'users', 'controller' => 'users', 'action' => 'logout')
-					)
+					'login' => Configure::read('Facebook.login'),
+					'logout' => Configure::read('Facebook.logout')
 				)
+			);
+		}
+
+		public function onUserProfile(&$event){
+			return array(
+				'element' => 'profile'
 			);
 		}
 	}
