@@ -40,6 +40,7 @@
 			if(self::$configs[$key] = Configure::read("Facebook.$key")) {
 				return self::$configs[$key];
 			}
+			
 			// try load configuration file and try again.
 			Configure::load('facebook.facebook');
 			self::$configs = Configure::read('Facebook');

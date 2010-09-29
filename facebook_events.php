@@ -19,10 +19,13 @@
 	 * Licensed under The MIT License
 	 * Redistributions of files must retain the above copyright notice.
 	*/
-	App::import('Lib', 'Facebook.FB');
 	
 	class FacebookEvents extends AppEvents{
 		public function onSetupCache() {
+		}
+
+		public function onRequireLibs(){
+			App::import('Lib', 'Facebook.FB');
 		}
 
 		public function onSetupConfig(){
