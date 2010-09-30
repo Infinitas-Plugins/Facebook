@@ -322,17 +322,16 @@
 				$appId = FacebookInfo::getConfig('appId');
 				$session = json_encode($this->Session->read('FB.Session'));
 				$init = '<div id="fb-root"></div>';
-				$init .= $this->Html->scriptBlock(
-					"
+				$init .= $this->Html->scriptBlock("
 			      window.fbAsyncInit = function() {
 			        FB.init({
 			          appId   : '{$appId}',
-			          session : {$session}, // don't refetch the session when PHP already has it
-			          status  : true, // check login status
-			          cookie  : true, // enable cookies to allow the server to access the session
-			          xfbml   : true // parse XFBML
+			          session : {$session}, /* don't refetch the session when PHP already has it */
+			          status  : true, /* check login status */
+			          cookie  : true, /* enable cookies to allow the server to access the session */
+			          xfbml   : true  /* parse XFBML */
 			        });
-			        // whenever the user logs in, we refresh the page
+			        /** whenever the user logs in, we refresh the page*/
 			        FB.Event.subscribe('auth.login', function() {
 			          window.location.reload();
 			        });
