@@ -318,37 +318,40 @@
 		 * @access public
 		 */
 		function init($options = array()) {
-			if(FacebookInfo::getConfig('appId')) {
-				$appId = FacebookInfo::getConfig('appId');
-				$session = json_encode($this->Session->read('FB.Session'));
-				$init = '<div id="fb-root"></div>';
-				$init .= $this->Html->scriptBlock("
-			      window.fbAsyncInit = function() {
-			        FB.init({
-			          appId   : '{$appId}',
-			          session : {$session}, /* don't refetch the session when PHP already has it */
-			          status  : true, /* check login status */
-			          cookie  : true, /* enable cookies to allow the server to access the session */
-			          xfbml   : true  /* parse XFBML */
-			        });
-			        /** whenever the user logs in, we refresh the page*/
-			        FB.Event.subscribe('auth.login', function() {
-			          window.location.reload();
-			        });
-			      };
-			      (function() {
-			        var e = document.createElement('script');
-			        e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-			        e.async = true;
-			        document.getElementById('fb-root').appendChild(e);
-			      }());
-	      	",
-					$options
-					);
-				return $init;
-			}else {
+			$appId = FacebookInfo::getConfig('appId');
+			if(!$appId){
 				return "<span class='error'>No Facebook configuration detected. Please add the facebook configuration file to your config folder.</span>";
 			}
+
+			$appId = FacebookInfo::getConfig('appId');
+			$session = json_encode($this->Session->read('FB.Session'));
+			$init = '<div id="fb-root"></div>';
+			$init .= $this->Html->scriptBlock("
+				window.fbAsyncInit = function() {
+					FB.init({
+						appId   : '{$appId}',
+						session : {$session}, /* don't refetch the session when PHP already has it */
+						status  : true, /* check login status */
+						cookie  : true, /* enable cookies to allow the server to access the session */
+						xfbml   : true  /* parse XFBML */
+					});
+
+					/** whenever the user logs in, we refresh the page*/
+					FB.Event.subscribe('auth.login', function() {
+						window.location.reload();
+					});
+				};
+						
+				(function() {
+					var e = document.createElement('script');
+					e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+					e.async = true;
+					document.getElementById('fb-root').appendChild(e);
+				}());",
+				$options
+			);
+						
+			return $init;
 		}
 
 		/**
