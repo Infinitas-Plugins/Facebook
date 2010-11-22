@@ -18,9 +18,8 @@
 	 * 
 	 * Licensed under The MIT License
 	 * Redistributions of files must retain the above copyright notice.
-	*/
-	
-	class FacebookEvents extends AppEvents{
+	*/	
+	final class FacebookEvents extends AppEvents{
 		public function onSetupCache() {
 		}
 
@@ -43,7 +42,7 @@
 			return $config;
 		}
 
-		public function onRequireComponentsToLoad(&$event){
+		public function onRequireComponentsToLoad($event){
 			return 'Facebook.Connect';
 		}
 
@@ -51,7 +50,7 @@
 			return 'Facebook.Facebook';
 		}
 		
-		public function onRequireTodoList(&$event){
+		public function onRequireTodoList($event){
 			$config = Configure::read('Facebook');
 			if(!empty($config)){
 				return false;
@@ -69,7 +68,7 @@
 		/**
 		 * Called before cms content is echo'ed
 		 */
-		public function onCmsBeforeContentRender(&$event, $data) {
+		public function onCmsBeforeContentRender($event, $data) {
 			$config = $this->__getConfig();
 			if(isset($config['Cms.before']) && in_array('like', $config['Cms.before'])) {
 				$link = $data['_this']->Event->trigger('cms.slugUrl', array('type' => 'contents', 'data' => $data['content']));
@@ -87,7 +86,7 @@
 		/**
 		 * Called after cms content is echo'ed
 		 */
-		public function onCmsAfterContentRender(&$event, $data) {
+		public function onCmsAfterContentRender($event, $data) {
 			$config = $this->__getConfig();
 			if(isset($config['Cms.after']) && in_array('like', $config['Cms.after'])) {
 				$link = $data['_this']->Event->trigger('cms.slugUrl', array('type' => 'contents', 'data' => $data['content']));
@@ -104,7 +103,7 @@
 		/**
 		 * Called before blog post is echo'ed
 		 */
-		public function onBlogBeforeContentRender(&$event, $data) {
+		public function onBlogBeforeContentRender($event, $data) {
 			$config = $this->__getConfig();
 			if(isset($config['Blog.before']) && in_array('like', $config['Blog.before'])) {
 				$link = $data['_this']->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $data['post']));
@@ -121,7 +120,7 @@
 		/**
 		 * Called after blog post is echo'ed
 		 */
-		public function onBlogAfterContentRender(&$event, $data) {
+		public function onBlogAfterContentRender($event, $data) {
 			$config = $this->__getConfig();
 			if(isset($config['Blog.after']) && in_array('like', $config['Blog.after'])) {
 				$link = $data['_this']->Event->trigger('blog.slugUrl', array('type' => 'posts', 'data' => $data['post']));
@@ -138,7 +137,7 @@
 		/**
 		 * called if a page is added and active, or activated.
 		 */
-		public function onCmsContentAdded(&$event, $data) {
+		public function onCmsContentAdded($event, $data) {
 			$link = $data['event']->trigger(
 				'cms.slugUrl',
 				array(
@@ -175,7 +174,7 @@
 			);
 		}
 
-		public function onUserProfile(&$event){
+		public function onUserProfile($event){
 			return array(
 				'element' => 'profile'
 			);
