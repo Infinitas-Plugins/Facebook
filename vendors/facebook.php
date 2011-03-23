@@ -730,7 +730,7 @@
 				isset($parts['port']) &&
 						(($protocol === 'http://' && $parts['port'] !== 80) ||
 								($protocol === 'https://' && $parts['port'] !== 443))
-				? ':' . $parts['port'] : '';
+				? ':' . $parts['port'] : null;
 
 		// rebuild
 		return $protocol . $parts['host'] . $port . $parts['path'] . $query;
